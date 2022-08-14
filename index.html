@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <div id="links">
+      <div><a href="index.html">Home</a></div>
+      <div><a href="applied.html">Applied Jobs</a></div>
+      <div><a href="bookmark.html">Bookmarks</a></div>
+    </div>
+    <form action="" id="form">
+      <h2>Enter Your Application Details</h2>
+      <input placeholder="Enter Name" id="name" name="name" type="text" />
+      <input placeholder="Enter email" type="email" name="email" id="email" />
+      <select name="role" id="role">
+        <option value="FSD">FSD</option>
+        <option value="Backend">Backend</option>
+        <option value="Frontend">Frontend</option>
+      </select>
+      <input
+        id="salary"
+        type="number"
+        placeholder="Enter expected salary in lakhs per annum "
+      />
+      <input id="submit" type="submit" name="submit" value="Submit" />
+    </form>
+  </body>
+  <script>
+    //you need to code here
+    document.getElementById("form").addEventListener("submit", submitData);
+    var userData = JSON.parse(localStorage.getItem("jobList")) || [];
+    function submitData(event) {
+      event.preventDefault();
+      var name1 = document.getElementById("name");
+      var email1 = document.getElementById("email").value;
+      var role1 = document.getElementById("role").value;
+      var salary1 = document.getElementById("salary").value;
+      var userObj = {
+        UserName: name1.value,
+        UserEmail: email1,
+        UserRole: role1,
+        UserSalary: salary1,
+      };
+      userData.push(userObj);
+      localStorage.setItem("jobList", JSON.stringify(userData));
+      name1.value = "";
+      email.value = "";
+      salary.value = "";
+      alert("Sign Up successfully");
+    }
+  </script>
+</html>
