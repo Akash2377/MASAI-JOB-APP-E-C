@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admitted</title>
+    <link rel="stylesheet" href="commonStyles.css" />
+    <script
+      src="https://kit.fontawesome.com/584aebd994.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div id="links">
+      <div><a href="index.html">Home</a></div>
+      <div><a href="applied.html">Applied Jobs</a></div>
+      <div><a href="bookmark.html">Bookmarks</a></div>
+    </div>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Job Applied</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="body"></tbody>
+      </table>
+    </main>
+  </body>
+  <script>
+    //you need to code here
+    var bookmark = JSON.parse(localStorage.getItem("bookmark"));
+    window.addEventListener("load", function () {
+      displayData(bookmark);
+    });
+
+    function displayData(bookmark) {
+      document.querySelector("tbody").innerText = "";
+      bookmark.map(function (ele, index) {
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        td1.innerText = ele.UserName;
+        var td2 = document.createElement("td");
+        td2.innerText = ele.UserEmail;
+        var td3 = document.createElement("td");
+        td3.innerText = ele.UserRole;
+        var td4 = document.createElement("td");
+        td4.innerHTML =
+          "<i class='fa-solid fa-trash-can' style = 'color:red ; cursor : pointer'></i>";
+        td4.childNodes[0].addEventListener("click", function () {
+          deleteBookmark(index);
+        });
+        tr.append(td1, td2, td3, td4);
+        document.querySelector("tbody").append(tr);
+      });
+    }
+    function deleteBookmark(index) {
+      bookmark.splice(index, 1);
+      localStorage.setItem("bookmark", JSON.stringify(bookmark));
+      displayData(bookmark);
+    }
+  </script>
+</html>

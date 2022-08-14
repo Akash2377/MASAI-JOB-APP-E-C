@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database</title>
+    <link rel="stylesheet" href="commonStyles.css" />
+  </head>
+
+  <body>
+    <div id="links">
+      <div><a href="index.html">Home</a></div>
+      <div><a href="applied.html">Applied Jobs</a></div>
+      <div><a href="bookmark.html">Bookmarks</a></div>
+    </div>
+    <!-- Sort By Name -->
+    <select name="SortByName" id="sbn" onchange="handleSortByName()">
+      <option value="">Sort By Names</option>
+      <option value="Ascending">Ascending</option>
+      <option value="Descending">Descending</option>
+    </select>
+    <!-- Sort By Salary -->
+    <select name="SortBySalary" id="sbs" onchange="handleSortBySalary()">
+      <option value="">Sort By Salary</option>
+      <option value="htl">High to Low</option>
+      <option value="lth">Low to High</option>
+    </select>
+    <!-- filter -->
+    <select name="filter" id="flt" onchange="handleFilter()">
+      <option value="">Filter by Role</option>
+      <option value="All">All</option>
+      <option value="FSD">FSD</option>
+      <option value="Frontend">Frontend</option>
+      <option value="Backend">Backend</option>
+    </select>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Job applied</th>
+            <th>Salary expected</th>
+            <th>Add to bookmark</th>
+          </tr>
+        </thead>
+        <tbody id="body">
+          <!-- Append your output to tbody -->
+        </tbody>
+      </table>
+    </main>
+  </body>
+  <script>
+    //you need to code here
+    var appliedJobs = JSON.parse(localStorage.getItem("jobList")) || [];
+    window.addEventListener("load", function () {
+      displayData(appliedJobs);
+    });
+    function displayData(appliedJobs) {
+      document.querySelector("tbody").innerHTML = "";
+      appliedJobs.map(function (elm) {
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        td1.innerText = elm.UserName;
+        var td2 = document.createElement("td");
+        td2.innerText = elm.UserEmail;
+        var td3 = document.createElement("td");
+        td3.innerText = elm.UserRole;
+        var td4 = document.createElement("td");
+        td4.innerText = elm.UserSalary;
+        var td5 = document.createElement("td");
+        td5.innerText = "Bookmark";
+        td5.setAttribute("class", "bookmark");
+        tr.append(td1, td2, td3, td4, td5);
+        td5.addEventListener("click", function () {
+          addBookmark(elm);
+        });
+        document.querySelector("tbody").append(tr);
+      });
+    }
+    var bookmark = JSON.parse(localStorage.getItem("bookmark")) || [];
+    function addBookmark(elm) {
+      var flag = bookmark.filter(function (element) {
+        return elm.UserEmail == element.UserEmail;
+      });
+      if (flag.length == 0) {
+        bookmark.push(elm);
+        console.log(elm);
+        localStorage.setItem("bookmark", JSON.stringify(bookmark));
+      }
+    }
+    function handleSortBySalary() {
+      var temp = document.getElementById("sbs").value;
+      console.log(temp);
+      if (temp == "htl") {
+        appliedJobs.sort(function (a, b) {
+          return b.UserSalary - a.UserSalary;
+        });
+        displayData(appliedJobs);
+      }
+      if (temp == "lth") {
+        appliedJobs.sort(function (a, b) {
+          return a.UserSalary - b.UserSalary;
+        });
+        displayData(appliedJobs);
+      }
+    }
+    function handleSortByName() {
+      var temp = document.getElementById("sbn").value;
+      console.log(temp);
+      if (temp == "Descending") {
+        appliedJobs.sort(function (a, b) {
+          if (a.UserName > b.UserName) return -1;
+          if (a.UserName < b.UserName) return 1;
+          return 0;
+        });
+        displayData(appliedJobs);
+      }
+      if (temp == "Ascending") {
+        appliedJobs.sort(function (a, b) {
+          if (a.UserName < b.UserName) return -1;
+          if (a.UserName > b.UserName) return 1;
+          return 0;
+        });
+        displayData(appliedJobs);
+      }
+    }
+    function handleFilter() {
+      var temp = document.getElementById("flt").value;
+
+      var filteredList = appliedJobs.filter(function (el) {
+        if (temp == "All" || temp == "") {
+          return true;
+        } else {
+          return el.UserRole == temp;
+        }
+      });
+      displayData(filteredList);
+    }
+  </script>
+</html>
